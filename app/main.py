@@ -1,14 +1,15 @@
+from contextlib import asynccontextmanager
 from fastapi import FastAPI, Depends
 from sqlalchemy.ext.asyncio import AsyncSession
 from . import models, schemas, crud
 from .database import engine, Base, SessionLocal
 
-app = FastAPI()
-
-@app.on_event("startup")
-async def startup():
+@asynccontextmanager
+async def lifespan(app: FastAPI):
     async with engine.begin() as conn:
         await conn.run_sync(Base.metadata.create_all)
+
+app = FastAPI(lifespan=lifespan)
 
 async def get_db():
     async with SessionLocal() as session:
