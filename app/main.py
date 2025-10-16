@@ -1,24 +1,45 @@
-from contextlib import asynccontextmanager
-from fastapi import FastAPI, Depends
+from fastapi import FastAPI, Depends, HTTPException
 from sqlalchemy.ext.asyncio import AsyncSession
-from . import models, schemas, crud
-from .database import engine, Base, SessionLocal
+from app.db import get_db
+from app.crud import program, survey
+from app.schema import Program, ProgramDetail, Survey, SurveyDetail
 
-@asynccontextmanager
-async def lifespan(app: FastAPI):
-    async with engine.begin() as conn:
-        await conn.run_sync(Base.metadata.create_all)
+app = FastAPI()
 
-app = FastAPI(lifespan=lifespan)
 
-async def get_db():
-    async with SessionLocal() as session:
-        yield session
+@app.get("/")
+async def read_root():
+    print(">>> root status: ok")
+    return {"status": "ok"}
 
-@app.get("/widgets/", response_model=list[schemas.Widget])
-async def read_widgets(db: AsyncSession = Depends(get_db)):
-    return await crud.get_widgets(db)
 
-@app.post("/widgets/", response_model=schemas.Widget)
-async def create_widget(widget: schemas.WidgetCreate, db: AsyncSession = Depends(get_db)):
-    return await crud.create_widget(db, widget)
+@app.get("/programs", response_model=list[Program])
+async def list_programs(db: AsyncSession = Depends(get_db)):
+        print(">>> list_programs: start")
+        db_objs = await program.get_all(db)
+        print(">>> list_programs: got db_objs:", len(db_objs))
+        res = [Program.model_validate(o) for o in db_objs]
+        print(">>> list_programs: returning")
+        return res
+
+
+@app.get("/programs/{id}", response_model=ProgramDetail)
+async def get_program(id: int, db: AsyncSession = Depends(get_db)):
+    db_obj = await program.get_detail(db, id)
+    if not db_obj:
+        raise HTTPException(status_code=404, detail="Program not found")
+    return ProgramDetail.model_validate(db_obj)
+
+
+@app.post("/programs", response_model=Program)
+async def create_program(obj_in: Program, db: AsyncSession = Depends(get_db)):
+    db_obj = await program.create(db, obj_in)
+    return Program.model_validate(db_obj)
+
+
+@app.get("/surveys/{id}", response_model=SurveyDetail)
+async def get_survey(id: int, db: AsyncSession = Depends(get_db)):
+    db_obj = await survey.get_detail(db, id)
+    if not db_obj:
+        raise HTTPException(status_code=404, detail="Survey not found")
+    return SurveyDetail.model_validate(db_obj)
