@@ -1,0 +1,15 @@
+<div class="container">
+  <h2>Programs</h2>
+
+  <ul>
+    <li *ngFor="let p of programs">
+      {{ p.program_name }} ({{ p.program_code }}) - {{ p.cal_year }}
+    </li>
+  </ul>
+
+  <h3>Add New Program</h3>
+  <input placeholder="Program Name" [(ngModel)]="newProgram.program_name">
+  <input placeholder="Program Code" [(ngModel)]="newProgram.program_code">
+  <input type="number" placeholder="Year" [(ngModel)]="newProgram.cal_year">
+  <button (click)="addProgram()">Add</button>
+</div>
