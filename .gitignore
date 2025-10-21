@@ -1,6 +1,7 @@
 .venv
 __pycache__/
 */__pycache/
+.env
 
 # Compiled output
 ui/dist
@@ -42,3 +43,5 @@ ui/typings
 # System files
 .DS_Store
 Thumbs.db
+.env
+.env

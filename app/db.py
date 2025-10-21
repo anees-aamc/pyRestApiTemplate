@@ -4,8 +4,11 @@ from sqlalchemy.orm import declarative_base
 from contextlib import asynccontextmanager
 import os
 from dotenv import load_dotenv
+from logging import getLogger
 
 load_dotenv()
+
+logger = getLogger('uvicorn.error')
 
 DATABASE_URL = (
     f"postgresql+asyncpg://{os.getenv('POSTGRES_USER')}:{os.getenv('POSTGRES_PASSWORD')}"
@@ -31,11 +34,11 @@ Base = declarative_base()
 # @asynccontextmanager
 async def get_db():
     """Async DB dependency for FastAPI."""
-    print(">>> get_db: entering")
     async with AsyncSessionLocal() as session:
         try:
-            print(">>> get_db: yield session")
             yield session
+        except Exception as e:
+            logger.info("get_db: exception:", e)
+            raise
         finally:
-            print(">>> get_db: closing session")
             await session.close()

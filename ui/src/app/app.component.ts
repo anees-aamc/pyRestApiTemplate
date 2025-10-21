@@ -1,10 +1,11 @@
 import { Component } from '@angular/core';
-import { ProgramsComponent } from './components/programs/programs.component';
+import { DashboardComponent } from './components/dashboard/dashboard.component';
+import { RouterOutlet } from '@angular/router';
 
 @Component({
   selector: 'app-root',
   standalone: true,
-  imports: [ProgramsComponent],
-  template: `<app-programs></app-programs>`
+  imports: [RouterOutlet],
+  template: `<router-outlet></router-outlet>`
 })
 export class AppComponent {}

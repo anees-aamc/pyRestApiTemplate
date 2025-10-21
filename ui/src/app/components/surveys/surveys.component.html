@@ -1,0 +1,16 @@
+<div class="container">
+  <h2>Surveys</h2>
+
+  <ul>
+    <li *ngFor="let s of surveys">
+      {{ s.program_name }} ({{ s.program_code }}) - {{ s.cal_year }}
+    </li>
+  </ul>
+
+  <h3>Add New Survey</h3>
+  <input placeholder="Survey Name" [(ngModel)]="newSurvey.program_name">
+  <input placeholder="Survey Code" [(ngModel)]="newSurvey.program_code">
+  <input type="number" placeholder="Year" [(ngModel)]="newSurvey.cal_year">
+  <button (click)="addSurvey()">Add</button>
+</div>
+

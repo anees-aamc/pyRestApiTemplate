@@ -16,7 +16,7 @@ class BaseSchema(BaseModel):
 # -------------------------------------------------
 
 class Program(BaseSchema):
-    id: int
+    id: Optional[int] = None
     cal_year: Optional[int] = None
     program_code: Optional[str] = None
     program_name: Optional[str] = None
@@ -28,6 +28,18 @@ class Program(BaseSchema):
 class SurveyType(BaseSchema):
     survey_type_cd: str
     survey_type_desc: Optional[str] = None
+
+
+class Survey(BaseSchema):
+    id: Optional[int] = None
+    survey_type_cd: Optional[str] = None        # FK → survey_type
+    cal_year: Optional[int] = None
+    program_id: Optional[int] = None            # FK → program
+    program_code: Optional[str] = None
+    title: Optional[str] = None
+    description: Optional[str] = None
+    open_date: Optional[date] = None
+    close_date: Optional[date] = None
 
 
 class EventType(BaseSchema):
@@ -63,18 +75,6 @@ class BaseQuestion(BaseSchema):
     conditional: Optional[str] = None
     required: Optional[str] = None
     cme_cpe: Optional[str] = None
-
-
-class Survey(BaseSchema):
-    id: int
-    survey_type_cd: Optional[str] = None        # FK → survey_type
-    cal_year: Optional[int] = None
-    program_id: Optional[int] = None            # FK → program
-    program_code: Optional[str] = None
-    title: Optional[str] = None
-    description: Optional[str] = None
-    open_date: Optional[date] = None
-    close_date: Optional[date] = None
 
 
 class QuestionCrosswalk(BaseSchema):

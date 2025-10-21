@@ -2,9 +2,12 @@ from typing import Generic, TypeVar, Type, List, Optional
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy.future import select
 from pydantic import BaseModel
+from logging import getLogger
 
 ModelType = TypeVar("ModelType")
 SchemaType = TypeVar("SchemaType", bound=BaseModel)
+
+logger = getLogger('uvicorn.error')
 
 
 class CRUDBase(Generic[ModelType, SchemaType]):
@@ -20,6 +23,7 @@ class CRUDBase(Generic[ModelType, SchemaType]):
         return result.scalars().all()
 
     async def create(self, db: AsyncSession, obj_in: SchemaType) -> ModelType:
+        logger.info(f"create {self.model.__name__}: {obj_in}")
         obj_data = obj_in.model_dump(exclude_unset=True)
         db_obj = self.model(**obj_data)
         db.add(db_obj)
