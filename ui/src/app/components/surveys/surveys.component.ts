@@ -5,6 +5,9 @@ import { FormsModule } from '@angular/forms'
 
 interface Survey {
   id?: number;
+  survey_type_cd: string;
+  title: string;
+  description: string;
   program_name: string;
   program_code: string;
   cal_year: number;
@@ -18,7 +21,14 @@ interface Survey {
 })
 export class SurveysComponent implements OnInit {
   surveys: Survey[] = [];
-  newSurvey: Survey = { program_name: '', program_code: '', cal_year: new Date().getFullYear() };
+  newSurvey: Survey = {
+    survey_type_cd: '',
+    title: '',
+    description: '',
+    program_name: '', 
+    program_code: '', 
+    cal_year: new Date().getFullYear()
+  };
 
   constructor(private http: HttpClient) {}
 
@@ -39,7 +49,14 @@ export class SurveysComponent implements OnInit {
       .subscribe({
         next: (p) => {
           this.surveys.push(p);
-          this.newSurvey = { program_name: '', program_code: '', cal_year: new Date().getFullYear() };
+          this.newSurvey = {
+            survey_type_cd: '',
+            title: '',
+            description: '',
+            program_name: '', 
+            program_code: '', 
+            cal_year: new Date().getFullYear()
+          };
         },
         error: (err) => console.error('Failed to create survey', err)
       });

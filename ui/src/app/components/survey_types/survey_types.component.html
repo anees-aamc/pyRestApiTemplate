@@ -1,0 +1,15 @@
+<div class="container">
+  <h2>Survey Types</h2>
+
+  <ul>
+    <li *ngFor="let s of surveyTypes">
+      <a href="/survey_types/{{ s.survey_type_cd }}">{{ s.survey_type_cd }}</a>
+    </li>
+  </ul>
+
+  <h3>Add New Survey Type</h3>
+  <input placeholder="Survey Type Code" [(ngModel)]="newSurveyType.survey_type_cd">
+  <input placeholder="Survey Type Description" [(ngModel)]="newSurveyType.survey_type_desc">
+  <button (click)="addSurveyType()">Add</button>
+</div> 
+

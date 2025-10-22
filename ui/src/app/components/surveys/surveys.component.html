@@ -3,13 +3,16 @@
 
   <ul>
     <li *ngFor="let s of surveys">
-      {{ s.program_name }} ({{ s.program_code }}) - {{ s.cal_year }}
+      <a href="/surveys/{{ s.id }}">{{ s.title }} ({{ s.survey_type_cd }}) - {{ s.cal_year }}</a>
     </li>
   </ul>
 
   <h3>Add New Survey</h3>
-  <input placeholder="Survey Name" [(ngModel)]="newSurvey.program_name">
-  <input placeholder="Survey Code" [(ngModel)]="newSurvey.program_code">
+  <input placeholder="Survey Type" [(ngModel)]="newSurvey.survey_type_cd">
+  <input placeholder="Survey Title" [(ngModel)]="newSurvey.title">
+  <input placeholder="Survey Description" [(ngModel)]="newSurvey.description">
+  <input placeholder="Program Name" [(ngModel)]="newSurvey.program_name">
+  <input placeholder="Program Code" [(ngModel)]="newSurvey.program_code">
   <input type="number" placeholder="Year" [(ngModel)]="newSurvey.cal_year">
   <button (click)="addSurvey()">Add</button>
 </div>

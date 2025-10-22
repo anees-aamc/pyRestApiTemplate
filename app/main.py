@@ -3,8 +3,8 @@ from fastapi.middleware.cors import CORSMiddleware
 from sqlalchemy.ext.asyncio import AsyncSession
 from logging import getLogger
 from app.db import get_db
-from app.crud import program, survey
-from app.schema import Program, ProgramDetail, Survey, SurveyDetail
+from app.crud import program, survey, survey_type
+from app.schema import Program, ProgramDetail, Survey, SurveyDetail, SurveyType
 
 app = FastAPI()
 
@@ -54,9 +54,45 @@ async def create_program(obj_in: Program, db: AsyncSession = Depends(get_db)):
     return Program.model_validate(db_obj)
 
 
+@app.get("/surveys", response_model=list[Survey])
+async def list_surveys(db: AsyncSession = Depends(get_db)):
+        db_objs = await survey.get_all(db)
+        logger.info(f"list_surveys: listing {len(db_objs)} surveys")
+        res = [Survey.model_validate(o) for o in db_objs]
+        return res
+
+
 @app.get("/surveys/{id}", response_model=SurveyDetail)
 async def get_survey(id: int, db: AsyncSession = Depends(get_db)):
     db_obj = await survey.get_detail(db, id)
     if not db_obj:
         raise HTTPException(status_code=404, detail="Survey not found")
     return SurveyDetail.model_validate(db_obj)
+
+
+@app.post("/surveys", response_model=Survey)
+async def create_survey(obj_in: Survey, db: AsyncSession = Depends(get_db)):
+    db_obj = await survey.create(db, obj_in)
+    return Survey.model_validate(db_obj)
+
+
+@app.get("/survey_types", response_model=list[SurveyType])
+async def list_survey_types(db: AsyncSession = Depends(get_db)):
+        db_objs = await survey_type.get_all(db)
+        logger.info(f"list_survey_types: listing {len(db_objs)} survey_types")
+        res = [SurveyType.model_validate(o) for o in db_objs]
+        return res
+
+
+@app.get("/survey_types/{survey_type_cd}", response_model=SurveyType)
+async def get_survey_type(survey_type_cd: str, db: AsyncSession = Depends(get_db)):
+    db_obj = await survey_type.get_detail(db, survey_type_cd)
+    if not db_obj:
+        raise HTTPException(status_code=404, detail=f"Survey type `{survey_type_cd}`not found")
+    return SurveyType.model_validate(db_obj)
+
+
+@app.post("/survey_types", response_model=SurveyType)
+async def create_survey_type(obj_in: SurveyType, db: AsyncSession = Depends(get_db)):
+    db_obj = await survey_type.create(db, obj_in)
+    return SurveyType.model_validate(db_obj)

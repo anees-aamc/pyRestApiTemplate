@@ -49,10 +49,10 @@ class SurveyType(Base):
     survey_type_cd: Mapped[str] = mapped_column(Text, primary_key=True)
     survey_type_desc: Mapped[Optional[str]] = mapped_column(Text)
 
-    # # Relationship name "surveys" matches Survey.survey_type below
-    # surveys: Mapped[List["Survey"]] = relationship(
-    #     "Survey", back_populates="survey_type", lazy="selectin"
-    # )
+    # Relationship name "surveys" matches Survey.survey_type below
+    surveys: Mapped[List["Survey"]] = relationship(
+        "Survey", back_populates="survey_type", lazy="selectin"
+    )
 
 
 class Survey(Base):
@@ -72,9 +72,9 @@ class Survey(Base):
     # program: Mapped[Optional["Program"]] = relationship(
     #     "Program", back_populates="surveys", lazy="selectin"
     # )
-    # survey_type: Mapped[Optional["SurveyType"]] = relationship(
-    #     "SurveyType", back_populates="surveys", lazy="selectin"
-    # )
+    survey_type: Mapped[Optional["SurveyType"]] = relationship(
+        "SurveyType", back_populates="surveys", lazy="selectin"
+    )
 
 
 # class EventType(Base):

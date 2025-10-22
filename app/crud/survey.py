@@ -14,7 +14,7 @@ class CRUDSurvey(CRUDBase[SurveyModel, Survey]):
             .filter(SurveyModel.id == id)
             .options(
                 selectinload(SurveyModel.program),
-                # selectinload(SurveyModel.survey_type),
+                selectinload(SurveyModel.survey_type_cd),
                 # selectinload(SurveyModel.survey_data),
                 # selectinload(SurveyModel.crosswalks),
             )

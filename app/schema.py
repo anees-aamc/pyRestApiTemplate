@@ -151,7 +151,7 @@ class ProgramDetail(Program):
 class SurveyDetail(Survey):
     """Survey including nested program and survey type."""
     program: Optional[Program] = None
-    survey_type: Optional[SurveyType] = None
+    survey_type_cd: Optional[SurveyType] = None
     survey_data: Optional[List[SurveyData]] = None
     crosswalks: Optional[List[QuestionCrosswalk]] = None
 
